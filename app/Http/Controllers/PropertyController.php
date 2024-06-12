@@ -23,7 +23,7 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        return view('properties.create');
+        //
     }
 
     /**
@@ -31,17 +31,7 @@ class PropertyController extends Controller
      */
     public function store(StorePropertyRequest $request)
     {
-        //get the validated data
-        $validated = $request->validated();
-
-        //create the slug
-        $validated['slug'] = \Str::slug($validated['name']);
-
-
-        Property::create($validated);
-
-        return redirect()->route('properties.index')
-            ->with('flash.banner', 'Property created successfully');
+        //
     }
 
     /**
@@ -68,13 +58,8 @@ class PropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
-        //get the validated data
-        $validated = $request->validated();
 
-        //create the slug
-        $validated['slug'] = \Str::slug($validated['name']);
-
-        $property->update($validated);
+        $property->update($request->validated());
 
         return redirect()->route('properties.index')
             ->with('flash.banner', 'Property updated successfully');
