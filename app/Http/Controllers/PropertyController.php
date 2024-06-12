@@ -14,7 +14,7 @@ class PropertyController extends Controller
     public function index()
     {
         return view('properties.index', [
-            'properties' => Property::paginate(),
+            'properties' => Property::orderBy('created_at', 'DESC')->paginate(),
         ]);
     }
 
@@ -23,7 +23,7 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        //
+        return view('properties.create');
     }
 
     /**
@@ -31,7 +31,17 @@ class PropertyController extends Controller
      */
     public function store(StorePropertyRequest $request)
     {
-        //
+        //get the validated data
+        $validated = $request->validated();
+
+        //create the slug
+        $validated['slug'] = \Str::slug($validated['name']);
+
+
+        Property::create($validated);
+
+        return redirect()->route('properties.index')
+            ->with('flash.banner', 'Property created successfully');
     }
 
     /**
@@ -39,7 +49,9 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return view('properties.show', [
+            'property' => $property,
+        ]);
     }
 
     /**
@@ -58,8 +70,13 @@ class PropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
+        //get the validated data
+        $validated = $request->validated();
 
-        $property->update($request->validated());
+        //create the slug
+        $validated['slug'] = \Str::slug($validated['name']);
+
+        $property->update($validated);
 
         return redirect()->route('properties.index')
             ->with('flash.banner', 'Property updated successfully');
@@ -70,6 +87,14 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        $model = $property;
+        $property->delete();
+
+        //set the banner status to danger
+
+        session()->flash('flash.bannerStyle', 'danger');
+        return redirect()->route('properties.index')
+            ->with('flash.banner', 'Property deleted successfully');
+
     }
 }

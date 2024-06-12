@@ -18,12 +18,12 @@ class PropertyFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'image' => $this->faker->imageUrl(),
+            //'image' => $this->faker->imageUrl(),
             'slug' => $this->faker->slug,
             'description' => $this->faker->text,
             'price' => $this->faker->randomFloat(2, 10000, 1000000),
             'location' => $this->faker->address,
-            'category_id' =>1
+            //'category_id' =>1
         ];
     }
 }
